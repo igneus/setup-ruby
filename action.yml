@@ -23,7 +23,7 @@ inputs:
   bundler-cache-exclude:
     description: 'List of gems to be excluded from bundler cache'
     required: false
-    default: 'default'
+    default: ''
   working-directory:
     description: 'The working directory to use for resolving paths for .ruby-version, .tool-versions and Gemfile.lock.'
     required: false
