@@ -95,7 +95,7 @@ export async function installBundler(bundlerVersionInput, lockFile, platform, ru
   return bundlerVersion
 }
 
-export async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, bundlerVersion) {
+export async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, bundlerVersion, uncachedGems) {
   if (gemfile === null) {
     console.log('Could not determine gemfile path, skipping "bundle install" and caching')
     return false
@@ -138,6 +138,17 @@ export async function bundleInstall(gemfile, lockFile, platform, engine, rubyVer
   let cachedKey = null
   try {
     cachedKey = await cache.restoreCache(paths, key, restoreKeys)
+
+    uncachedGems.forEach(gem => {
+      exec.exec('bundle', ['info', '--path', gem], {
+        listeners: {
+          stdout: data => {
+            const gemPath = data.toString()
+            exec.exec('rm', ['-rf', gemPath])
+          }
+        }
+      })
+    })
   } catch (error) {
     if (error.name === cache.ValidationError.name) {
       throw error;
