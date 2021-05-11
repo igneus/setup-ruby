@@ -44686,6 +44686,7 @@ async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, b
         listeners: {
           stdout: data => {
             const gemPath = data.toString()
+            console.log('deleting ' + gemPath)
             exec.exec('rm', ['-rf', gemPath])
           }
         }
