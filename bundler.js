@@ -139,13 +139,13 @@ export async function bundleInstall(gemfile, lockFile, platform, engine, rubyVer
   try {
     cachedKey = await cache.restoreCache(paths, key, restoreKeys)
 
-    uncachedGems.forEach(gem => {
+    await uncachedGems.forEach(async (gem) => {
       exec.exec('bundle', ['info', '--path', gem], {
         listeners: {
-          stdout: data => {
+          stdout: async (data) => {
             const gemPath = data.toString()
             console.log('deleting ' + gemPath)
-            exec.exec('rm', ['-rf', gemPath])
+            await exec.exec('rm', ['-rf', gemPath])
           }
         }
       })
