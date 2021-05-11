@@ -44687,7 +44687,7 @@ async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, b
           stdout: data => {
             const gemPath = data.toString()
             console.log('deleting ' + gemPath)
-            code = exec.exec('rm', ['-rf', gemPath])
+            const code = exec.exec('rm', ['-rf', gemPath])
             if (code !== 0) {
               core.info(`[warning] Failed to delete ${gemPath}`)
             }
