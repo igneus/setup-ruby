@@ -44684,10 +44684,10 @@ async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, b
     uncachedGems.forEach(gem => {
       exec.exec('bundle', ['info', '--path', gem], {
         listeners: {
-          stdout: data => {
+          stdout: async (data) => {
             const gemPath = data.toString()
             console.log('deleting ' + gemPath)
-            const code = exec.exec('sudo', ['rm', '-rf', gemPath])
+            const code = await exec.exec('sudo', ['rm', '-rf', gemPath])
             if (code !== 0) {
               core.info(`[warning] Failed to delete ${gemPath} (exit status ${code})`)
             }
