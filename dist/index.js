@@ -44537,6 +44537,7 @@ module.exports = require("net");
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_CACHE_VERSION", function() { return DEFAULT_CACHE_VERSION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "detectGemfiles", function() { return detectGemfiles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "installBundler", function() { return installBundler; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bundleInstall", function() { return bundleInstall; });
@@ -44546,6 +44547,8 @@ const core = __webpack_require__(186)
 const exec = __webpack_require__(514)
 const cache = __webpack_require__(799)
 const common = __webpack_require__(390)
+
+const DEFAULT_CACHE_VERSION = '0'
 
 // The returned gemfile is guaranteed to exist, the lockfile might not exist
 function detectGemfiles() {
@@ -44720,7 +44723,7 @@ async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, b
 }
 
 async function computeBaseKey(platform, engine, version, lockFile, cacheVersion) {
-  const cacheVersionSuffix = '0' === cacheVersion ? '' : `-cachever:${cacheVersion}`
+  const cacheVersionSuffix = DEFAULT_CACHE_VERSION === cacheVersion ? '' : `-cachever:${cacheVersion}`
   let key = `setup-ruby-bundler-cache-v3-${platform}-${engine}-${version}${cacheVersionSuffix}`
 
   if (engine !== 'jruby' && common.isHeadVersion(version)) {
@@ -52072,7 +52075,7 @@ const inputDefaults = {
   'bundler': 'default',
   'bundler-cache': 'true',
   'working-directory': '.',
-  'cache-version': '0',
+  'cache-version': bundler.DEFAULT_CACHE_VERSION,
 }
 
 // entry point when this action is run on its own

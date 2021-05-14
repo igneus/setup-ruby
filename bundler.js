@@ -5,6 +5,8 @@ const exec = require('@actions/exec')
 const cache = require('@actions/cache')
 const common = require('./common')
 
+export const DEFAULT_CACHE_VERSION = '0'
+
 // The returned gemfile is guaranteed to exist, the lockfile might not exist
 export function detectGemfiles() {
   const gemfilePath = process.env['BUNDLE_GEMFILE'] || 'Gemfile'
@@ -178,7 +180,7 @@ export async function bundleInstall(gemfile, lockFile, platform, engine, rubyVer
 }
 
 async function computeBaseKey(platform, engine, version, lockFile, cacheVersion) {
-  const cacheVersionSuffix = '0' === cacheVersion ? '' : `-cachever:${cacheVersion}`
+  const cacheVersionSuffix = DEFAULT_CACHE_VERSION === cacheVersion ? '' : `-cachever:${cacheVersion}`
   let key = `setup-ruby-bundler-cache-v3-${platform}-${engine}-${version}${cacheVersionSuffix}`
 
   if (engine !== 'jruby' && common.isHeadVersion(version)) {
