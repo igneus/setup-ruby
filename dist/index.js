@@ -44637,7 +44637,7 @@ async function installBundler(bundlerVersionInput, lockFile, platform, rubyPrefi
   return bundlerVersion
 }
 
-async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, bundlerVersion) {
+async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, bundlerVersion, cacheVersion) {
   if (gemfile === null) {
     console.log('Could not determine gemfile path, skipping "bundle install" and caching')
     return false
@@ -44671,7 +44671,8 @@ async function bundleInstall(gemfile, lockFile, platform, engine, rubyVersion, b
   // cache key
   const paths = [cachePath]
   const baseKey = await computeBaseKey(platform, engine, rubyVersion, lockFile)
-  const key = `${baseKey}-${await common.hashFile(lockFile)}`
+  const cacheVersionSuffix = '0' === cacheVersion ? '' : `-${cacheVersion}`
+  const key = `${baseKey}-${await common.hashFile(lockFile)}${cacheVersionSuffix}`
   // If only Gemfile.lock changes we can reuse part of the cache, and clean old gem versions below
   const restoreKeys = [`${baseKey}-`]
   console.log(`Cache key: ${key}`)
@@ -52126,7 +52127,7 @@ async function setupRuby(options = {}) {
 
     if (inputs['bundler-cache'] === 'true') {
       await common.measure('bundle install', async () =>
-          bundler.bundleInstall(gemfile, lockFile, platform, engine, version, bundlerVersion))
+          bundler.bundleInstall(gemfile, lockFile, platform, engine, version, bundlerVersion, inputs['cache-version']))
     }
   }
 
