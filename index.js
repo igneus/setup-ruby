@@ -12,6 +12,7 @@ const inputDefaults = {
   'bundler': 'default',
   'bundler-cache': 'true',
   'working-directory': '.',
+  'cache-version': '0',
 }
 
 // entry point when this action is run on its own
